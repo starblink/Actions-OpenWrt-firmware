@@ -36,16 +36,16 @@ EOF
 `
 
 
-sed -i -e '/local dnsport/{a '"$custom1"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i -e '/local dnsport/{a\'"$custom1"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 
 sed -i -e '/start() /{
 :a
 /{/{x;s/^/./;x}
-/}/{x;s/.//;/./!{x;i '"$custom2"' ' -e b}';x}
+/}/{x;s/.//;/./!{x;i\'"$custom2"' ' -e';b};x}
 n
 ba
 }' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 
-sed -i 's%killall.*trojan%'"$custom3"'%' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
