@@ -49,3 +49,7 @@ ba
 
 
 sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
+#disable subscribe.lua in crontab
+sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
+
