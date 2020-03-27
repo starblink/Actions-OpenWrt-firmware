@@ -53,6 +53,6 @@ sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' package/lean/luci-app-ssr-pl
 #disable subscribe.lua in crontab
 sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
 
-#a bug; wrong path
-sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
+#a bug; wrong path 官方源码已修复
+#sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
 
