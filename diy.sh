@@ -8,7 +8,7 @@
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 sed -i 's/192.168.1.1/192.168.1.251/g'           package/base-files/files/bin/config_generate
-sed -i '1a net.netfilter.nf_conntrack_max=65535' package/base-files/files/etc/sysctl.conf
+sed -i -e '2{/65535/! a\net.netfilter.nf_conntrack_max=65535 ' -e'}' package/base-files/files/etc/sysctl.conf
 sed -i '/query_method=/s/tcp_only/udp_tcp/'      package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 custom1=`cat <<-'EOF'
 #modify\\
