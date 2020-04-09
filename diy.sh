@@ -7,7 +7,8 @@
 #=================================================
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
-sed -i 's/192.168.1.1/192.168.1.251/g'           package/base-files/files/bin/config_generate
+# sed -i 's/192.168.1.1/192.168.1.251/g'           package/base-files/files/bin/config_generate
+sed -i '/static *)/,/lan *)/{0,//b;//s/"[^"]*"/"192.168.1.254"/}' package/base-files/files/bin/config_generate
 sed -i -e '2{/65535/! a\net.netfilter.nf_conntrack_max=65535 ' -e'}' package/base-files/files/etc/sysctl.conf
 sed -i '/query_method=/s/tcp_only/udp_tcp/'      package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 custom1=`cat <<-'EOF'
@@ -56,3 +57,5 @@ sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' package/lean/lu
 #a bug; wrong path 官方源码已修复
 #sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
 
+#set root pwd as ''
+sed -i 's/^root:[^:]*:/root:$1$SywMFoHP$SXVOQ9JQLDUN37L2l3HOe.:/' package/base-files/files/etc/shadow
