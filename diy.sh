@@ -59,3 +59,7 @@ sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' package/lean/lu
 
 #set root pwd as ''
 sed -i 's/^root:[^:]*:/root:$1$SywMFoHP$SXVOQ9JQLDUN37L2l3HOe.:/' package/base-files/files/etc/shadow
+
+#modify feeds.conf.default add helloword project(ssr+)
+echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
+./scripts/feeds update -a && ./scripts/feeds install -a
