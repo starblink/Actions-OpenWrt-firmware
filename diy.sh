@@ -10,7 +10,14 @@
 # sed -i 's/192.168.1.1/192.168.1.251/g'           package/base-files/files/bin/config_generate
 sed -i '/static *)/,/lan *)/{0,//b;//s/"[^"]*"/"192.168.1.254"/}' package/base-files/files/bin/config_generate
 sed -i -e '2{/65535/! a\net.netfilter.nf_conntrack_max=65535 ' -e'}' package/base-files/files/etc/sysctl.conf
-sed -i '/query_method=/s/tcp_only/udp_tcp/'      package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
+#modify feeds.conf.default add helloword project(ssr+)
+grep -qP '^src-git helloworld' || echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
+./scripts/feeds update -a && ./scripts/feeds install -a
+
+
+sed -i '/query_method=/s/tcp_only/udp_tcp/'      feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+
 custom1=`cat <<-'EOF'
 #modify\\
 #127.0.0.1:7055:1081@1.0.0.1:853\\
@@ -37,7 +44,7 @@ EOF
 `
 
 
-sed -i -e '/local dnsport/{a\'"$custom1"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i -e '/local dnsport/{a\'"$custom1"' ' -e'}' feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 
 sed -i -e '/start() /{
@@ -46,20 +53,17 @@ sed -i -e '/start() /{
 /}/{x;s/.//;/./!{x;i\'"$custom2"' ' -e';b};x}
 n
 ba
-}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+}' feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 
-sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' package/lean/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
+sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #disable subscribe.lua in crontab
-sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
+sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
 
 #a bug; wrong path 官方源码已修复
-#sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' package/lean/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
+#sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
 
 #set root pwd as ''
 sed -i 's/^root:[^:]*:/root:$1$SywMFoHP$SXVOQ9JQLDUN37L2l3HOe.:/' package/base-files/files/etc/shadow
 
-#modify feeds.conf.default add helloword project(ssr+)
-echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
-./scripts/feeds update -a && ./scripts/feeds install -a
