@@ -12,7 +12,7 @@ sed -i '/static *)/,/lan *)/{0,//b;//s/"[^"]*"/"192.168.1.254"/}' package/base-f
 grep -qP '^net.netfilter.nf_conntrack_max=65535' package/base-files/files/etc/sysctl.conf || sed -i '1 a\net.netfilter.nf_conntrack_max=65535 ' package/base-files/files/etc/sysctl.conf
 
 #modify feeds.conf.default add helloword project(ssr+)
-grep -qP '^src-git helloworld' || echo "src-git helloworld https://github.com/fw876/helloworld" >> feeds.conf.default
+grep -qP '^src-git helloworld' ./feeds.conf.default || echo "src-git helloworld https://github.com/fw876/helloworld" >> ./feeds.conf.default
 ./scripts/feeds update -a && ./scripts/feeds install -a
 
 
