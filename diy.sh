@@ -10,6 +10,8 @@
 # sed -i 's/192.168.1.1/192.168.1.251/g'           package/base-files/files/bin/config_generate
 sed -i '/static *)/,/lan *)/{0,//b;//s/"[^"]*"/"192.168.1.254"/}' package/base-files/files/bin/config_generate
 grep -qP '^net.netfilter.nf_conntrack_max=65535' package/base-files/files/etc/sysctl.conf || sed -i '1 a\net.netfilter.nf_conntrack_max=65535 ' package/base-files/files/etc/sysctl.conf
+#set root pwd as ''
+sed -i 's/^root:[^:]*:/root:$1$SywMFoHP$SXVOQ9JQLDUN37L2l3HOe.:/' package/base-files/files/etc/shadow
 
 #modify feeds.conf.default add helloword project(ssr+)
 grep -qP '^src-git helloworld' ./feeds.conf.default || echo "src-git helloworld https://github.com/fw876/helloworld" >> ./feeds.conf.default
@@ -59,11 +61,9 @@ ba
 sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 #disable subscribe.lua in crontab
-sed -i '/shadowsocksr.*subscribe.lua/s/^/#/;s/sleep .*/sleep 2/' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
+sed -i 'N;\#sleep.*\n/usr/bin/lua.*shadowsocksr.*subscribe.lua$#d;P;D;' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
 
 #a bug; wrong path 官方源码已修复
 #sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
 
-#set root pwd as ''
-sed -i 's/^root:[^:]*:/root:$1$SywMFoHP$SXVOQ9JQLDUN37L2l3HOe.:/' package/base-files/files/etc/shadow
 
