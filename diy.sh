@@ -21,7 +21,7 @@ grep -qP '^src-git helloworld' ./feeds.conf.default || echo "src-git helloworld 
 sed -i '/query_method=/s/tcp_only/udp_tcp/'      feeds/helloworld/luci-app-ssr-plus/root/etc/init.d/shadowsocksr
 
 custom1=`cat <<-'EOF'
-#modify\\
+#custom1 modify\\
 #127.0.0.1:7055:1081@1.0.0.1:853\\
 echo "$dnsstr" |grep '@' && custom_socks5port=$(echo "$dnsstr" | awk -F '@' '{print $1}' |awk -F ':' '{print $3}') || custom_socks5port=$(echo "$dnsstr" |awk -F ':' '{print $3}')\\
 custom_dns=$(echo "$dnsstr" | awk -F '@' '{print $2}')
@@ -29,15 +29,15 @@ EOF
 `
 
 custom2=`cat <<-'EOF'
-#modify\\
+#custom2 modify\\
 custom_socks5port=${custom_socks5port:=1081}\\
 custom_dns=${custom_dns:=8.8.4.4}\\
-netstat -tupln |grep -q $custom_socks5port && (dns2socks 127.0.0.1:$custom_socks5port $custom_dns 127.0.0.1:7055 >/root/dns.log 2>&1 &) || echo "Nomatch this socks5 port!" >/root/dns.log
+netstat -tupln |grep -q $custom_socks5port && (dns2socks 127.0.0.1:$custom_socks5port $custom_dns 127.0.0.1:7055 >/root/dns.log 2>&1 &) || echo 'Nomatch this socks5 port!' >/root/dns.log
 EOF
 `
 
 custom3=`cat <<-'EOF'
-#modify\\
+#custom3 modify\\
 # killall -q -9 trojan\\
 ps -ef |grep trojan-ssr-retcp |grep -v grep |awk '$0=$1' |xargs kill -9\\
 kill -9 $(busybox ps -w | grep trojan-ssr-socksdns | grep -v grep | awk '{print $1}') >/dev/null 2>&1\\
@@ -62,8 +62,3 @@ sed -i -e '/killall.*trojan/{c\'"$custom3"' ' -e'}' feeds/helloworld/luci-app-ss
 
 #disable subscribe.lua in crontab
 sed -i 'N;\#sleep.*\n/usr/bin/lua.*shadowsocksr.*subscribe.lua$#d;P;D;' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/ssrplusupdate.sh
-
-#a bug; wrong path 官方源码已修复
-#sed -i '/refresh_cmd.*gfwlist_url/s#>.*/tmp/gfw.b64#> /tmp/gfw.b64#' feeds/helloworld/luci-app-ssr-plus/root/usr/share/shadowsocksr/update.lua
-
-
