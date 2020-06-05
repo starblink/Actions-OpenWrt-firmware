@@ -41,7 +41,8 @@ custom3=`cat <<-'EOF'
 # killall -q -9 trojan\\
 ps -ef |grep trojan-ssr-retcp |grep -v grep |awk '$0=$1' |xargs kill -9\\
 kill -9 $(busybox ps -w | grep trojan-ssr-socksdns | grep -v grep | awk '{print $1}') >/dev/null 2>&1\\
-kill -9 $(busybox ps -w | grep trojan-ssr-netflix | grep -v grep | awk '{print $1}') >/dev/null 2>&1
+kill -9 $(busybox ps -w | grep trojan-ssr-netflix | grep -v grep | awk '{print $1}') >/dev/null 2>&1\\
+kill -9 $(busybox ps -w | grep redsocks-ssr-retcp | grep -v grep | awk '{print $1}') >/dev/null 2>&1
 EOF
 `
 
